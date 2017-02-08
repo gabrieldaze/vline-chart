@@ -19,10 +19,15 @@ class VLine {
 		this.context = context
 
 		// Initializing main variables
-		this.vLineElements = null
+		this.vLineHeader = null
 		this.elementRow = []
 		this.fontFamily = null
 		this.fontSize = null
+		this.maxTitleWidth = 0
+		this.maxElementWidth = 0
+		this.columnPos = []
+		this.rowPos = []
+		this.vLineMarker = []
 	}
 
 	// Set up the chart font
@@ -35,7 +40,7 @@ class VLine {
 
 	// Set up the vLine Elements
 	setupVLineHeader(title, arrayElements) {
-		this.vLineElements = {
+		this.vLineHeader = {
 			'title':title,
 			'elements':arrayElements
 		}
@@ -45,7 +50,7 @@ class VLine {
 	addElement(title, elementMarker) {
 		if(title == '' || elementMarker == 0)
 			return alert('[ERROR] addElement: Missing parameter')
-		if(elementMarker > this.vLineElements.elements.length)
+		if(elementMarker > this.vLineHeader.elements.length)
 			return alert('[ERROR] addElement: elementMarker out of bounds')
 		this.elementRow.push({
 			'title':title,
@@ -55,48 +60,72 @@ class VLine {
 
 	// Set up the canvas settings
 	buildCanvas() {
-		var arrayStrings = []
-		var context = this.context
+		var characterWidth = this.fontSize * 0.75
+		
+		var arrayTitle = [this.vLineHeader.title.length]
+		for(var i = 0; i < this.elementRow.length; i++) {
+			arrayTitle.push(this.elementRow[i].title.length)
+		}
+		this.maxTitleWidth = Math.max(...arrayTitle) * characterWidth
 
-		var goldenRatio = 1.618
-		var goldenLine = this.fontSize * goldenRatio
-		var widthBase = (goldenLine * goldenLine) / this.fontSize
-		var charWidth = widthBase // / Math.sqrt(this.fontSize)
+		var arrayElement = []
+		for(var i = 0; i < this.vLineHeader.elements.length; i++) {
+			arrayElement.push(this.vLineHeader.elements[i].length)
+		}
+		this.maxElementWidth = Math.max(...arrayElement) * characterWidth
 
-		var titleArray = []
-		var maxTitleLength = 0
-		var elementArray = []
-		var maxElementLength = 0
-		titleArray.push(this.vLineElements.title.length)
-		this.vLineElements.elements.forEach(function(string) {
-			elementArray.push(parseInt(string.length))
-		});
-		this.elementRow.forEach(function(string) {
-			titleArray.push(string.title.length)
-		});
-		maxTitleLength = Math.max(...titleArray)
-		maxElementLength = Math.max(...elementArray)
-		this.canvas.width = (charWidth * maxTitleLength) + (charWidth * maxElementLength) + (this.fontMargin * this.elementRow.length) + 2 * this.fontMargin
-		this.canvas.height = (this.fontSize + this.fontMargin * 2) + (this.fontSize + this.fontMargin * 2) * this.elementRow.length
+		this.canvas.width = this.maxTitleWidth + (this.maxElementWidth * this.vLineHeader.elements.length) + this.fontMargin * (this.elementRow.length + 1)
+
+		var canvasHeight = (this.fontSize + this.fontMargin) * (this.elementRow.length + 1)
+		this.canvas.height = canvasHeight
+
 		document.body.appendChild(this.canvas)
-		this.drawTable()
-	} 
-
-	// Draw the table
-	drawTable() {
-		this.context.font = this.fontSize + 'px ' + this.fontFamily
-		this.context.fillStyle = '#EEE'
+		this.context.fillStyle = '#DDD'
 		this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
+		this.drawCanvas()
+	}
+
+	// Draw the canvas elements
+	drawCanvas() {
+		this.context.save()
 		this.context.fillStyle = '#333'
-		this.context.fillText(this.vLineElements.title, this.fontMargin, this.fontMargin * 1.4)
-		var currentX = this.fontMargin
-		var currentY = this.fontMargin * 1.4 + this.fontSize * 4
-		var context = this.context
-		var fontSize = this.fontSize
-		var fontMargin = this.fontMargin
-		this.elementRow.forEach(function(obj) {
-			context.fillText(obj.title, currentX, currentY)
-			currentY += fontSize + fontMargin * 1.4
-		});
+		this.context.font = this.fontSize + 'px ' + this.fontFamily
+		
+		var currentY = this.fontMargin
+		this.context.fillText(this.vLineHeader.title, this.fontMargin / 2, currentY)
+		// var currentY = this.fontMargin * 1.4 * 2 + (this.fontMargin * 1.4 / 2)
+		for(var i = 0; i < this.elementRow.length; i++) {
+			currentY += this.fontMargin + this.fontSize
+			this.rowPos.push(currentY)
+			this.context.fillText(this.elementRow[i].title, this.fontMargin / 2, currentY)
+		}
+		this.context.textAlign = 'center'
+		currentY = this.fontMargin
+		var currentX = this.canvas.width - this.fontMargin - (this.maxElementWidth / 2)
+		for(var i = this.vLineHeader.elements.length - 1; i >= 0; i--) {
+			this.context.fillText(this.vLineHeader.elements[i], currentX, currentY)
+			currentX -= this.maxElementWidth + this.fontMargin
+			this.columnPos.push(currentX)
+		}
+		console.log(this.rowPos)
+		console.log(this.columnPos)
+		// this.context.fillRect(this.columnPos[1] + this.maxElementWidth * 2 - 2.5,this.rowPos[0] - 10,10,10)
+		this.drawMarker(5)
+		this.context.restore()
+	}
+
+	// Draw the point markers
+	drawMarker(radius) {
+		var columns = this.columnPos.reverse()
+		var lines = this.rowPos
+		for(var i = 0; i < this.elementRow.length; i++) {
+			this.context.beginPath()
+			this.context.arc(columns[this.elementRow[i].element], lines[i] - radius, radius, 0, 2 * Math.PI)
+			this.vLineMarker.push({
+				'x':columns[this.elementRow[i].element],
+				'y':lines[i] - radius/2
+			});
+			this.context.fill()
+		}
 	}
 }
