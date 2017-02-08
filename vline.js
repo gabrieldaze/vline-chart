@@ -74,14 +74,14 @@ class VLine {
 		}
 		this.maxElementWidth = Math.max(...arrayElement) * characterWidth
 
-		this.canvas.width = this.maxTitleWidth + (this.maxElementWidth * this.vLineHeader.elements.length) + this.fontMargin * 4//* (this.elementRow.length + 1)
+		this.canvas.width = this.maxTitleWidth + (this.maxElementWidth * this.vLineHeader.elements.length) + this.fontMargin * (this.vLineHeader.elements.length + 1)
 
 		var canvasHeight = (this.fontSize + this.fontMargin) * (this.elementRow.length + 1)
 		this.canvas.height = canvasHeight
 
 		document.body.appendChild(this.canvas)
-		this.context.fillStyle = '#DDD'
-		this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
+		// this.context.fillStyle = '#DDD'
+		// this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
 		this.drawCanvas()
 	}
 
@@ -99,9 +99,9 @@ class VLine {
 			this.rowPos.push(currentY)
 			this.context.fillText(this.elementRow[i].title, this.fontMargin / 2, currentY)
 			this.context.beginPath()
-			this.context.moveTo(this.fontMargin / 2, currentY + 5)
-			this.context.lineTo(this.maxTitleWidth - this.fontMargin, currentY + 5)
-			this.context.lineWidth = 0.5
+			this.context.moveTo(this.fontMargin / 2, currentY + this.fontMargin / 2)
+			this.context.lineTo(this.maxTitleWidth - this.fontMargin, currentY + this.fontMargin / 2)
+			this.context.lineWidth = 1
 			this.context.stroke()
 		}
 		this.context.textAlign = 'center'
