@@ -1,7 +1,7 @@
 window.onload = function() {
 
 	vline = new VLine()
-	vline.setupFont('Courier', 14, 20)
+	vline.setupFont('Courier', 16, 20)
 	vline.setupVLineHeader('Leadership Attributes', [
 		'Low',
 		'Medium',
