@@ -3,7 +3,7 @@ Simple vertical line chart
 
 The vLine Chart is basicly a table with columns, rows and markers
 
-![Preview](http://i.imgur.com/HoLizRM.png)
+![Preview](preview.png)
 
 ##### To use the vLine Chart, first you need to instanciate the class
 ```javascript

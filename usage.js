@@ -1,20 +1,17 @@
 window.onload = function() {
 
 	vline = new VLine()
-	vline.setupFont('Courier', 16, 20)
-	vline.setupVLineHeader('Atributos de liderança', [
-		'n1',
-		'n2',
-		'n3',
-		'n4'
+	vline.setupFont('Courier', 14, 20)
+	vline.setupVLineHeader('Leadership Attributes', [
+		'Low',
+		'Medium',
+		'High'
 	])
-	vline.addElement('Alinhamento cultural', 3)
-	vline.addElement('Gestão de negócios', 2)
-	vline.addElement('Lidar com ambiguidades e incertezas', 1)
-	vline.addElement('Liderança de pessoas', 2)
-	vline.addElement('Experiência internacional', 2)
-	vline.addElement('Conectividade', 2)
-	vline.addElement('Liderança', 1)
-	vline.addElement('Experiência nacional', 1)
+	vline.addElement('Business management', 2)
+	vline.addElement('Entrepreneurial mindset', 3)
+	vline.addElement('Ambition and resilience', 2)
+	vline.addElement('Relationship building', 2)
+	vline.addElement('Project management', 1)
+	vline.addElement('Taking orders', 1)
 	vline.buildCanvas()
 }
