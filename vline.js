@@ -67,14 +67,14 @@ class VLine {
 			arrayTitle.push(this.elementRow[i].title.length)
 		}
 		this.maxTitleWidth = Math.max(...arrayTitle) * characterWidth
-
+		console.log(this.maxTitleWidth)
 		var arrayElement = []
 		for(var i = 0; i < this.vLineHeader.elements.length; i++) {
 			arrayElement.push(this.vLineHeader.elements[i].length)
 		}
 		this.maxElementWidth = Math.max(...arrayElement) * characterWidth
 
-		this.canvas.width = this.maxTitleWidth + (this.maxElementWidth * this.vLineHeader.elements.length) + this.fontMargin * (this.elementRow.length + 1)
+		this.canvas.width = this.maxTitleWidth + (this.maxElementWidth * this.vLineHeader.elements.length) + this.fontMargin * 4//* (this.elementRow.length + 1)
 
 		var canvasHeight = (this.fontSize + this.fontMargin) * (this.elementRow.length + 1)
 		this.canvas.height = canvasHeight
@@ -93,24 +93,29 @@ class VLine {
 		
 		var currentY = this.fontMargin
 		this.context.fillText(this.vLineHeader.title, this.fontMargin / 2, currentY)
-		// var currentY = this.fontMargin * 1.4 * 2 + (this.fontMargin * 1.4 / 2)
+		
 		for(var i = 0; i < this.elementRow.length; i++) {
 			currentY += this.fontMargin + this.fontSize
 			this.rowPos.push(currentY)
 			this.context.fillText(this.elementRow[i].title, this.fontMargin / 2, currentY)
+			this.context.beginPath()
+			this.context.moveTo(this.fontMargin / 2, currentY + 5)
+			this.context.lineTo(this.maxTitleWidth - this.fontMargin, currentY + 5)
+			this.context.lineWidth = 0.5
+			this.context.stroke()
 		}
 		this.context.textAlign = 'center'
 		currentY = this.fontMargin
 		var currentX = this.canvas.width - this.fontMargin - (this.maxElementWidth / 2)
 		for(var i = this.vLineHeader.elements.length - 1; i >= 0; i--) {
 			this.context.fillText(this.vLineHeader.elements[i], currentX, currentY)
-			currentX -= this.maxElementWidth + this.fontMargin
 			this.columnPos.push(currentX)
+			currentX -= this.maxElementWidth + this.fontMargin
 		}
 		console.log(this.rowPos)
 		console.log(this.columnPos)
 		// this.context.fillRect(this.columnPos[1] + this.maxElementWidth * 2 - 2.5,this.rowPos[0] - 10,10,10)
-		this.drawMarker(5)
+		this.drawMarker(3)
 		this.context.restore()
 	}
 
@@ -120,12 +125,22 @@ class VLine {
 		var lines = this.rowPos
 		for(var i = 0; i < this.elementRow.length; i++) {
 			this.context.beginPath()
-			this.context.arc(columns[this.elementRow[i].element], lines[i] - radius, radius, 0, 2 * Math.PI)
+			this.context.arc(columns[this.elementRow[i].element - 1], lines[i] - radius, radius, 0, 2 * Math.PI)
 			this.vLineMarker.push({
-				'x':columns[this.elementRow[i].element],
+				'x':columns[this.elementRow[i].element - 1],
 				'y':lines[i] - radius/2
 			});
 			this.context.fill()
 		}
+		this.context.beginPath()
+		this.context.lineWidth = radius
+		for(var i = 0; i < this.vLineMarker.length; i++) {
+			if(i == 0) {
+				this.context.moveTo(this.vLineMarker[i].x, this.vLineMarker[i].y - radius / 2)
+			} else {
+				this.context.lineTo(this.vLineMarker[i].x, this.vLineMarker[i].y - radius / 2)
+			}
+		}
+		this.context.stroke()
 	}
 }
