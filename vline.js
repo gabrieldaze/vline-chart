@@ -99,9 +99,8 @@ class VLine {
 			this.rowPos.push(currentY)
 			this.context.fillText(this.elementRow[i].title, this.fontMargin / 2, currentY)
 			this.context.beginPath()
-			this.context.moveTo(this.fontMargin / 2, currentY + this.fontMargin / 2)
-			this.context.lineTo(this.maxTitleWidth - this.fontMargin, currentY + this.fontMargin / 2)
-			this.context.lineWidth = 1
+			this.context.moveTo(this.fontMargin / 2, currentY + 3)
+			this.context.lineTo(this.maxTitleWidth - this.fontMargin, currentY + 3)
 			this.context.stroke()
 		}
 		this.context.textAlign = 'center'
