@@ -21,23 +21,24 @@ vline.setupFont('Courier', 16, 20)
 
 ##### After setting the font, you need to setup the header of your chart
 ```javascript
-vline.setupVLineHeader('Atributos de liderança', [
-    'n1',
-    'n2',
-    'n3',
-    'n4'
+vline.setupVLineHeader('Leadership Attributes', [
+	'Low',
+	'Medium',
+	'High'
 ])
- ```
+```
  
 1. The first parameter is the <b>title</b> of your chart
 2. The second parameter is an <b>array of strings</b> which are the columns of your chart
  
 ##### Now you can add your rows to the chart
 ```javascript
-vline.addElement('Alinhamento cultural', 3)
-vline.addElement('Gestão de negócios', 2)
-vline.addElement('Lidar com ambiguidades e incertezas', 1)
-vline.addElement('Liderança de pessoas', 4)
+vline.addElement('Business management', 2)
+vline.addElement('Entrepreneurial mindset', 3)
+vline.addElement('Ambition and resilience', 2)
+vline.addElement('Relationship building', 2)
+vline.addElement('Project management', 1)
+vline.addElement('Taking orders', 1)
 ```
 
 1. The first parameter is the <b>description of your item</b>
