@@ -6,6 +6,7 @@ class VLine {
 		var canvas = document.createElement('canvas')
 		canvas.id = 'canvas'
 		this.canvas = canvas
+		this.canvas.style.display = 'none'
 
 		// Get the canvas context
 		var context = canvas.getContext('2d')
@@ -60,21 +61,14 @@ class VLine {
 			arrayTitle.push(this.elementRow[i].title.length)
 		}
 		this.maxTitleWidth = Math.max(...arrayTitle) * characterWidth
-		console.log(this.maxTitleWidth)
 		var arrayElement = []
 		for(var i = 0; i < this.vLineHeader.elements.length; i++) {
 			arrayElement.push(this.vLineHeader.elements[i].length)
 		}
 		this.maxElementWidth = Math.max(...arrayElement) * characterWidth
-
 		this.canvas.width = this.maxTitleWidth + (this.maxElementWidth * this.vLineHeader.elements.length) + this.fontMargin * (this.vLineHeader.elements.length + 1)
-
 		var canvasHeight = (this.fontSize + this.fontMargin) * (this.elementRow.length + 1)
 		this.canvas.height = canvasHeight
-
-		document.body.appendChild(this.canvas)
-		// this.context.fillStyle = '#DDD'
-		// this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
 		this.drawCanvas()
 	}
 
@@ -104,11 +98,12 @@ class VLine {
 			this.columnPos.push(currentX)
 			currentX -= this.maxElementWidth + this.fontMargin
 		}
-		console.log(this.rowPos)
-		console.log(this.columnPos)
-		// this.context.fillRect(this.columnPos[1] + this.maxElementWidth * 2 - 2.5,this.rowPos[0] - 10,10,10)
 		this.drawMarker(3)
 		this.context.restore()
+		var img = document.createElement('img')
+		img.src = this.canvas.toDataURL("image/png")
+		document.body.appendChild(img)
+
 	}
 
 	// Draw the point markers
